@@ -25,6 +25,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.webkit.CookieSyncManager;
 import com.facebook.android.R;
 import com.facebook.internal.ServerProtocol;
@@ -189,8 +190,12 @@ class AuthorizationClient implements Serializable {
     void tryNextHandler() {
         while (handlersToTry != null && !handlersToTry.isEmpty()) {
             currentHandler = handlersToTry.remove(0);
+            Log.e("Foursquare Facebook Auth Handler", currentHandler.toString());
+            Log.e("Foursquare Facebook Auth Handlers Left", handlersToTry.toString());
 
             boolean started = tryCurrentHandler();
+
+            Log.e("Foursquare Facebook Auth Handler Success", String.valueOf(started));
 
             if (started) {
                 return;
