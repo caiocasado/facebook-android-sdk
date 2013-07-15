@@ -278,8 +278,6 @@ public class WebDialog extends Dialog {
         webViewContainer.setPadding(margin, margin, margin, margin);
         webViewContainer.addView(webView);
         contentFrameLayout.addView(webViewContainer);
-
-        webView.resumeTimers();
     }
 
     private class DialogWebViewClient extends WebViewClient {
