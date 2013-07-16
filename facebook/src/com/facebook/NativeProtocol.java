@@ -63,6 +63,9 @@ final class NativeProtocol {
         try {
             packageInfo = context.getPackageManager().getPackageInfo(packageName,
                     PackageManager.GET_SIGNATURES);
+            if (packageInfo.versionCode < 40477) {
+                return false;
+            }
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
