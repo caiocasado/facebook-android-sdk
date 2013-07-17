@@ -30,6 +30,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import com.facebook.*;
+import com.facebook.android.BuildConfig;
 import com.facebook.android.R;
 import com.facebook.model.GraphUser;
 import com.facebook.internal.SessionAuthorizationType;
@@ -120,7 +121,9 @@ public class LoginButton extends Button {
             }
             if (currentSession != null && currentSession.isOpened()) {
                 if (!Utility.isSubset(permissions, currentSession.getPermissions())) {
-                    Log.e(TAG, "Cannot set additional permissions when session is already open.");
+                    if (BuildConfig.DEBUG) {
+                        Log.e(TAG, "Cannot set additional permissions when session is already open.");
+                    }
                     return false;
                 }
             }

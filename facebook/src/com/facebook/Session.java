@@ -23,6 +23,8 @@ import android.os.*;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
+
+import com.facebook.android.BuildConfig;
 import com.facebook.internal.SessionAuthorizationType;
 import com.facebook.internal.Utility;
 import com.facebook.internal.Validate;
@@ -711,9 +713,13 @@ public class Session implements Serializable {
                 session.authorizationBundle = bundle.getBundle(AUTH_BUNDLE_SAVE_KEY);
                 return session;
             } catch (ClassNotFoundException e) {
-                Log.w(TAG, "Unable to restore session", e);
+                if (BuildConfig.DEBUG) {
+                    Log.w(TAG, "Unable to restore session", e);
+                }
             } catch (IOException e) {
-                Log.w(TAG, "Unable to restore session.", e);
+                if (BuildConfig.DEBUG) {
+                    Log.w(TAG, "Unable to restore session.", e);
+                }
             }
         }
         return null;
@@ -1013,10 +1019,12 @@ public class Session implements Serializable {
                 }
             } else {
                 if (SessionAuthorizationType.PUBLISH.equals(authType)) {
-                    Log.w(TAG,
-                            String.format(
-                                    "Should not pass a read permission (%s) to a request for publish or manage authorization",
-                                    permission));
+                    if (BuildConfig.DEBUG) {
+                        Log.w(TAG,
+                                String.format(
+                                        "Should not pass a read permission (%s) to a request for publish or manage authorization",
+                                        permission));
+                    }
                 }
             }
         }
