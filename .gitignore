@@ -18,3 +18,4 @@ facebook/tests/assets/config.json
 
 # Gradle
 facebook/build/
+*.iml
