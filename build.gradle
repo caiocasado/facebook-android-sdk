@@ -1,0 +1,114 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.9.+'
+    }
+}
+
+apply plugin: 'android-library'
+
+dependencies {
+        compile 'com.android.support:support-v4:19.0.+'
+}
+
+android {
+    compileSdkVersion 8
+    buildToolsVersion "19.0.0"
+
+    sourceSets {
+        main {
+            manifest.srcFile 'facebook/AndroidManifest.xml'
+            java.srcDirs = ['facebook/src']
+            resources.srcDirs = ['facebook/src']
+            aidl.srcDirs = ['facebook/src']
+            renderscript.srcDirs = ['facebook/src']
+            res.srcDirs = ['facebook/res']
+            assets.srcDirs = ['facebook/assets']
+        }
+
+        // Move the tests to tests/java, tests/res, etc...
+        instrumentTest.setRoot('facebook/tests')
+
+        // Move the build types to build-types/<type>
+        // For instance, build-types/debug/java, build-types/debug/AndroidManifest.xml, ...
+        // This moves them out of them default location under src/<type>/... which would
+        // conflict with src/ being used by the main source set.
+        // Adding new build types or product flavors should be accompanied
+        // by a similar customization.
+        debug.setRoot('facebook/build-types/debug')
+        release.setRoot('facebook/build-types/release')
+    }
+}
+
+apply plugin: 'maven'
+//apply plugin: 'sigining'
+
+version = "1.0.0"
+group = "com.facebook"
+
+configurations {
+    archives {
+        extendsFrom configurations.default
+    }
+}
+
+//signing {
+//    required { has("release") && gradle.taskGraph.hasTask("uploadArchives") }
+//    sign configurations.archives
+//}
+
+afterEvaluate { project ->
+    uploadArchives {
+        configuration = configurations.archives
+        repositories.mavenDeployer {
+            //beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: NEXUS_URL) {
+                authentication(userName: NEXUS_USERNAME,
+                        password: NEXUS_PASSWORD)
+            }
+
+            pom.project {
+                name 'Facebook SDK for Android'
+                packaging 'aar'
+                description 'The facebook sdk for android'
+                url 'https://github.com/foursquare/facebook-sdk-android'
+
+                scm {
+                    url 'scm:git@github.com:foursquare/facebook-sdk-android.git'
+                    connection 'scm:git@github.com:foursquare/facebook-sdk-android.git'
+                    developerConnection 'scm:git@github.com:foursquare/facebook-sdk-android.git'
+                }
+
+                developers {
+                    developer {
+                        id 'kylefowler'
+                        name 'Kyle Fowler'
+                        email 'kyle.e.fowler@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+
+    /*task androidJavadocs(type: Javadoc) {
+        source = android.sourceSets.main.allJava
+    }
+
+    task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+        classifier = 'javadoc'
+        from androidJavadocs.destinationDir
+    }*/
+
+    task androidSourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives androidSourcesJar
+        //archives androidJavadocsJar
+    }
+}

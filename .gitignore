@@ -17,5 +17,14 @@ facebook/tests/assets/config.json
 .idea/inspectionProfiles/
 
 # Gradle
+.gradle
 facebook/build/
+build/
+*.gradle.properties
+gradle.properties
+
+# IntelliJ project files
+.idea/*
 *.iml
+facebook/.idea/*
+out/*
