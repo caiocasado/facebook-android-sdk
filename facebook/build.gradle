@@ -51,6 +51,7 @@ afterEvaluate { project ->
                         password: NEXUS_PASSWORD)
             }
 
+            pom.artifactId = "facebook-android-sdk"
             pom.project {
                 name 'Facebook SDK for Android'
                 packaging 'aar'
